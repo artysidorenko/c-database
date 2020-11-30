@@ -30,8 +30,8 @@ typedef enum { EXECUTE_SUCCESS, EXECUTE_TABLE_FULL } ExecuteResult;
 
 typedef struct {
   uint32_t id;
-  char username[COLUMN_USERNAME_SIZE];
-  char email[COLUMN_EMAIL_SIZE];
+  char username[COLUMN_USERNAME_SIZE + 1];    // +1 because C string ends with null char
+  char email[COLUMN_EMAIL_SIZE + 1];          // +1 because C string ends with null char
 } Row;
 
 typedef struct {
