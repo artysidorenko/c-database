@@ -2,6 +2,10 @@ describe 'database' do
   before do
       `rm -rf spec/test.db`
     end
+  
+  after do
+      `rm -rf spec/test.db`
+    end
 
   def run_script(commands)
     raw_output = nil
