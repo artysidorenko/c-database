@@ -19,8 +19,10 @@ jobs:
           gem install rspec
       - name: build application
         run: |
-          mkdir dist  
-          gcc-10 main.c -o dist/database
+          mkdir dist
+          gcc-10 -o dist/database \
+            main.c \
+            compiler.c
       - name: run tests
         run: |
           rspec spec/database.rb
