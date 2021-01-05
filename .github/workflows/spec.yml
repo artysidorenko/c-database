@@ -22,7 +22,8 @@ jobs:
           mkdir dist
           gcc-10 -o dist/database \
             main.c \
-            compiler.c
+            compiler.c \
+            pager.c
       - name: run tests
         run: |
           rspec spec/database.rb
