@@ -1,4 +1,6 @@
-#include <stdbool.h>
+#ifndef MAIN_C
+#define MAIN_C
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -7,44 +9,13 @@
 #include <fcntl.h>
 #include <errno.h>
 
+#include "common.h"
+#include "compiler.h"
+
 typedef enum { NODE_INTERNAL, NODE_LEAF } NodeType;
-
-typedef struct {
-  char* buffer;
-  size_t buffer_length;
-  ssize_t input_length;
-} InputBuffer;
-
-typedef enum {
-  META_COMMAND_SUCCESS,
-  META_COMMAND_UNRECOGNIZED_COMMAND
-} MetaCommandResult;
-
-typedef enum {
-  PREPARE_SUCCESS,
-  PREPARE_SYNTAX_ERROR,
-  PREPARE_UNRECOGNIZED_STATEMENT,
-  PREPARE_STRING_TOO_LONG,
-  PREPARE_NEGATIVE_ID
-} PrepareResult;
-
-typedef enum { STATEMENT_INSERT, STATEMENT_SELECT } StatementType;
-
-typedef enum { EXECUTE_SUCCESS, EXECUTE_TABLE_FULL, EXECUTE_DUPLICATE_KEY } ExecuteResult;
 
 #define COLUMN_USERNAME_SIZE 32
 #define COLUMN_EMAIL_SIZE 255
-
-typedef struct {
-  uint32_t id;
-  char username[COLUMN_USERNAME_SIZE + 1];    // +1 because C string ends with null char
-  char email[COLUMN_EMAIL_SIZE + 1];          // +1 because C string ends with null char
-} Row;
-
-typedef struct {
-  StatementType type;
-  Row row_to_insert;  // only used by insert statement
-} Statement;
 
 #define size_of_attribute(Struct, Attribute) sizeof(((Struct*)0)->Attribute)
 
@@ -69,7 +40,6 @@ void deserialize_row(void* source, Row* destination) {
 }
 
 const uint32_t PAGE_SIZE = 4096;
-#define TABLE_MAX_PAGES 100
 
 /*
  * Common Node Header Layout
@@ -142,25 +112,6 @@ const uint32_t INTERNAL_NODE_MAX_CELLS = 3;
 const uint32_t LEAF_NODE_RIGHT_SPLIT_COUNT = (LEAF_NODE_MAX_CELLS + 1) / 2;
 const uint32_t LEAF_NODE_LEFT_SPLIT_COUNT =
     (LEAF_NODE_MAX_CELLS + 1) - LEAF_NODE_RIGHT_SPLIT_COUNT;
-
-typedef struct {
-  int file_descriptor;
-  uint32_t file_length;
-  uint32_t num_pages;
-  void* pages[TABLE_MAX_PAGES];
-} Pager;
-
-typedef struct {
-  Pager* pager;
-  uint32_t root_page_num;
-} Table;
-
-typedef struct {
-  Table* table;
-  uint32_t page_num;
-  uint32_t cell_num;
-  bool end_of_table;  // Indicates a position one past the last element
-} Cursor;
 
 bool is_node_root(void* node) {
   uint8_t value = *((uint8_t*)(node + IS_ROOT_OFFSET));
@@ -801,48 +752,6 @@ MetaCommandResult do_meta_command(InputBuffer* input_buffer, Table* table) {
   }
 }
 
-PrepareResult prepare_insert(InputBuffer* input_buffer, Statement* statement) {
-  statement->type = STATEMENT_INSERT;
-
-  char* keyword = strtok(input_buffer->buffer, " ");
-  char* id_string = strtok(NULL, " ");
-  char* username = strtok(NULL, " ");
-  char* email = strtok(NULL, " ");
-
-  if (id_string == NULL || username == NULL || email == NULL) {
-    return PREPARE_SYNTAX_ERROR;
-  }
-
-  int id = atoi(id_string);
-  if (id < 0) {
-    return PREPARE_NEGATIVE_ID;
-  }
-  if (strlen(username) > COLUMN_USERNAME_SIZE) {
-    return PREPARE_STRING_TOO_LONG;
-  }
-  if (strlen(email) > COLUMN_EMAIL_SIZE) {
-    return PREPARE_STRING_TOO_LONG;
-  }
-
-  statement->row_to_insert.id = id;
-  strcpy(statement->row_to_insert.username, username);
-  strcpy(statement->row_to_insert.email, email);
-
-  return PREPARE_SUCCESS;
-}
-
-PrepareResult prepare_statement(InputBuffer* input_buffer, Statement* statement) {
-  if (strncmp(input_buffer->buffer, "insert", 6) == 0) {
-    return prepare_insert(input_buffer, statement);
-  }
-  if (strcmp(input_buffer->buffer, "select") == 0) {
-    statement->type = STATEMENT_SELECT;
-    return PREPARE_SUCCESS;
-  }
-
-  return PREPARE_UNRECOGNIZED_STATEMENT;
-}
-
 ExecuteResult execute_statement(Statement* statement, Table* table) {
   switch (statement->type) {
     case (STATEMENT_INSERT):
@@ -908,3 +817,5 @@ int main(int argc, char* argv[]) {
     }
   }
 }
+
+#endif /* MAIN_C */
