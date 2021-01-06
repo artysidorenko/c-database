@@ -8,8 +8,6 @@
 
 #include "common.h"
 
-#define PAGE_SIZE 4096
-
 Pager* pager_open(const char* filename);
 
 void pager_flush(Pager* pager, uint32_t page_num);

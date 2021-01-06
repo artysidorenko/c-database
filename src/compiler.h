@@ -7,6 +7,8 @@
 #include <string.h>
 #include <unistd.h>
 
+#include "common.h"
+
 typedef struct {
   char* buffer;
   size_t buffer_length;
@@ -27,15 +29,6 @@ typedef enum {
   META_COMMAND_SUCCESS,
   META_COMMAND_UNRECOGNIZED_COMMAND
 } MetaCommandResult;
-
-#define COLUMN_USERNAME_SIZE 32
-#define COLUMN_EMAIL_SIZE 255
-
-typedef struct {
-  uint32_t id;
-  char username[COLUMN_USERNAME_SIZE + 1];    // +1 because C string ends with null char
-  char email[COLUMN_EMAIL_SIZE + 1];          // +1 because C string ends with null char
-} Row;
 
 typedef struct {
   StatementType type;

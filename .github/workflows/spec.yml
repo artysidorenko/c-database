@@ -21,9 +21,11 @@ jobs:
         run: |
           mkdir dist
           gcc-10 -o dist/database \
-            main.c \
-            compiler.c \
-            pager.c
+            src/main.c \
+            src/compiler.c \
+            src/pager.c \
+            src/b_tree.c \
+            src/cursor.c
       - name: run tests
         run: |
           rspec spec/database.rb
