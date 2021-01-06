@@ -40,6 +40,6 @@ typedef struct {
   bool end_of_table;  // Indicates a position one past the last element
 } Cursor;
 
-typedef enum { EXECUTE_SUCCESS, EXECUTE_TABLE_FULL, EXECUTE_DUPLICATE_KEY } ExecuteResult;
+typedef enum { EXECUTE_SUCCESS, EXECUTE_TABLE_FULL, EXECUTE_DUPLICATE_KEY, EXECUTE_ERROR } ExecuteResult;
 
 #endif /* COMMON_H */

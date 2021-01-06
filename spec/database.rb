@@ -9,7 +9,7 @@ describe 'database' do
 
   def run_script(commands)
     raw_output = nil
-    IO.popen("dist/database spec/test.db", "r+") do |pipe|
+    IO.popen("bin/database spec/test.db", "r+") do |pipe|
       commands.each do |command|
         begin
           pipe.puts command

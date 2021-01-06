@@ -38,6 +38,7 @@ void print_tree(Pager* pager, uint32_t page_num, uint32_t indentation_level) {
       for (uint32_t i = 0; i < num_keys; i++) {
         indent(indentation_level + 1);
         printf("- %d\n", *leaf_node_key(node, i));
+        // printf("- %d: %s\n", *leaf_node_key(node, i), leaf_node_value(node, i));
       }
       break;
     case (NODE_INTERNAL):
@@ -224,6 +225,7 @@ ExecuteResult execute_statement(Statement* statement, Table* table) {
     case (STATEMENT_SELECT):
       return execute_select(statement, table);
   }
+  return EXECUTE_ERROR;
 }
 
 int main(int argc, char* argv[]) {
@@ -278,6 +280,9 @@ int main(int argc, char* argv[]) {
         break;
       case (EXECUTE_TABLE_FULL):
         printf("Error: Table full.\n");
+        break;
+      case (EXECUTE_ERROR):
+        printf("Unknown Error.\n");
         break;
     }
   }

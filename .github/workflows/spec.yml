@@ -18,14 +18,7 @@ jobs:
         run: |
           gem install rspec
       - name: build application
-        run: |
-          mkdir dist
-          gcc-10 -o dist/database \
-            src/main.c \
-            src/compiler.c \
-            src/pager.c \
-            src/b_tree.c \
-            src/cursor.c
+        run: make
       - name: run tests
         run: |
           rspec spec/database.rb

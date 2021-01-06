@@ -9,6 +9,6 @@ Follows the tutorial - <https://cstack.github.io/db_tutorial/> - up to part 13, 
 
 ## Developing
 
-Compiling the codebase into an executable file:
+Compile the codebase into an executable file, by using the Makefile instructions:
 
-`gcc-10 main.c -o dist/database`
+`make`
