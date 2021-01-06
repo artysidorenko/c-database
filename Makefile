@@ -11,15 +11,9 @@ BINDIR	=	bin
 OBJDIR	=	$(BINDIR)/obj
 
 # Files
-SOURCE_FILES	=	\
-	main.c \
-	compiler.c \
-	pager.c \
-	b_tree.c \
-	cursor.c
-
+SOURCE_FILES 			= $(wildcard $(SRCDIR)/*.c)
 EXECUTABLE_FILES	= $(EXECUTABLE_NAME:%=$(BINDIR)/%)
-OBJECT_FILES			= $(SOURCE_FILES:%.c=$(OBJDIR)/%.o)
+OBJECT_FILES			= $(SOURCE_FILES:$(SRCDIR)/%.c=$(OBJDIR)/%.o)
 
 build: $(EXECUTABLE_FILES)
 

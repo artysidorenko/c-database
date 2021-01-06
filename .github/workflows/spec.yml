@@ -17,8 +17,5 @@ jobs:
       - name: install dependencies
         run: |
           gem install rspec
-      - name: build application
-        run: make
       - name: run tests
-        run: |
-          rspec spec/database.rb
+        run: make test
