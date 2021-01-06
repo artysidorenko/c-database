@@ -26,7 +26,10 @@ build: $(EXECUTABLE_FILES)
 clean:
 	rm -r -f $(BIN)
 
-.PHONY: build clean
+test: build
+	rspec spec/database.rb
+
+.PHONY: build clean test
 
 $(EXECUTABLE_FILES): $(OBJECT_FILES)
 	$(CC) $(LDFLAGS) -o $@ $^
