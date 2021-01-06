@@ -1,16 +1,17 @@
 
-# Compiler options
+# COMPILER OPTIONS
 CC							=	gcc-10
-CFLAGS					=	-c -Wall
+# throw error in case of any compile warnings:
+CFLAGS					=	-c -Wall -Werror
 LDFLAGS					=
 EXECUTABLE_NAME	= database
 
-# Directories
+# DIRECTORIES
 SRCDIR	=	src
 BINDIR	=	bin
 OBJDIR	=	$(BINDIR)/obj
 
-# Files
+# FILES
 SOURCE_FILES 			= $(wildcard $(SRCDIR)/*.c)
 EXECUTABLE_FILES	= $(EXECUTABLE_NAME:%=$(BINDIR)/%)
 OBJECT_FILES			= $(SOURCE_FILES:$(SRCDIR)/%.c=$(OBJDIR)/%.o)
