@@ -19,7 +19,7 @@ OBJECT_FILES			= $(SOURCE_FILES:$(SRCDIR)/%.c=$(OBJDIR)/%.o)
 build: $(EXECUTABLE_FILES)
 
 clean:
-	rm -r -f $(BIN)
+	rm -r -f $(BINDIR)
 
 test: build
 	rspec spec/database.rb
