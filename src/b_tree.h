@@ -61,9 +61,8 @@ extern const uint32_t INTERNAL_NODE_HEADER_SIZE;
 extern const uint32_t INTERNAL_NODE_KEY_SIZE;
 extern const uint32_t INTERNAL_NODE_CHILD_SIZE;
 extern const uint32_t INTERNAL_NODE_CELL_SIZE;
-
-/* Keep this small for testing */
 extern const uint32_t INTERNAL_NODE_MAX_CELLS;
+
 extern const uint32_t LEAF_NODE_RIGHT_SPLIT_COUNT;
 extern const uint32_t LEAF_NODE_LEFT_SPLIT_COUNT;
 
@@ -72,7 +71,7 @@ void set_node_root(void* node, bool is_root);
 uint32_t* leaf_node_num_cells(void* node);
 void* leaf_node_cell(void* node, uint32_t cell_num);
 uint32_t* leaf_node_key(void* node, uint32_t cell_num);
-void* leaf_node_value(void* node, uint32_t cell_num);
+Row* leaf_node_value(void* node, uint32_t cell_num);
 uint32_t* leaf_node_next_leaf(void* node);
 NodeType get_node_type(void* node);
 void set_node_type(void* node, NodeType type);
@@ -86,12 +85,9 @@ uint32_t* internal_node_key(void* node, uint32_t key_num);
 uint32_t get_node_max_key(void* node);
 uint32_t internal_node_find_child(void* node, uint32_t key);
 uint32_t* node_parent(void* node);
-/*
-Until we start recycling free pages, new pages will always
-go onto the end of the database file
-*/
 uint32_t get_unused_page_num(Pager* pager);
 void create_new_root(Table* table, uint32_t right_child_page_num);
+void internal_node_split_and_insert(Table* table, uint32_t old_node_page_num, uint32_t insert_child_page_num);
 void internal_node_insert(Table* table, uint32_t parent_page_num, uint32_t child_page_num);
 void update_internal_node_key(void* node, uint32_t old_key, uint32_t new_key);
 void leaf_node_split_and_insert(Cursor* cursor, uint32_t key, Row* value);

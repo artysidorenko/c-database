@@ -146,4 +146,64 @@ describe 'database' do
       "db > ",
     ])
   end
+
+  it 'allows printing out the structure of a 5-leaf-node btree' do
+    script = (1..36).map do |i|
+      "insert #{i} user#{i} person#{i}@example.com"
+    end
+    script << ".btree"
+    script << ".exit"
+    result = run_script(script)
+    expect(result.last(49)).to match_array([
+      "- internal (size 1)",
+      "  - internal (size 1)",
+      "    - leaf (size 7)",
+      "      - 1",
+      "      - 2",
+      "      - 3",
+      "      - 4",
+      "      - 5",
+      "      - 6",
+      "      - 7",
+      "    - key 7",
+      "    - leaf (size 7)",
+      "      - 8",
+      "      - 9",
+      "      - 10",
+      "      - 11",
+      "      - 12",
+      "      - 13",
+      "      - 14",
+      "  - key 7",
+      "  - internal (size 2)",
+      "    - leaf (size 7)",
+      "      - 15",
+      "      - 16",
+      "      - 17",
+      "      - 18",
+      "      - 19",
+      "      - 20",
+      "      - 21",
+      "    - key 21",
+      "    - leaf (size 7)",
+      "      - 22",
+      "      - 23",
+      "      - 24",
+      "      - 25",
+      "      - 26",
+      "      - 27",
+      "      - 28",
+      "    - key 28",
+      "    - leaf (size 8)",
+      "      - 29",
+      "      - 30",
+      "      - 31",
+      "      - 32",
+      "      - 33",
+      "      - 34",
+      "      - 35",
+      "      - 36",
+      "db > ",
+    ])
+  end
 end
